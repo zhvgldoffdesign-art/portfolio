@@ -27,6 +27,16 @@
       perspective: 800px;
     }
 
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
     .rolling-text {
       display: flex;
       gap: 0.04em;
@@ -50,7 +60,9 @@
 </head>
 <body>
   <div class="scene">
-    <div class="rolling-text" id="text"></div>
+    <div class="container">
+      <div class="rolling-text" id="text"></div>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
