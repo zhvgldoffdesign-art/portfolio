@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .scene {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      perspective: 800px;
+    }
+
+    .rolling-text {
+      display: flex;
+      gap: 0.04em;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: clamp(3rem, 14vw, 10rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+      transform-style: preserve-3d;
+      user-select: none;
+    }
+
+    .char {
+      display: inline-block;
+      transform-origin: center center -0.3em;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="rolling-text" id="text"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    const word = "Portfolio";
+    const container = document.getElementById("text");
+
+    // Build character spans
+    const chars = word.split("").map((letter) => {
+      const span = document.createElement("span");
+      span.className = "char";
+      span.textContent = letter;
+      container.appendChild(span);
+      return span;
+    });
+
+    // Rolling entrance animation
+    function playRoll(direction = 1) {
+      const tl = gsap.timeline({ repeat: -1, yoyo: false });
+
+      // Roll in from below
+      tl.fromTo(
+        chars,
+        {
+          rotationX: direction * -90,
+          opacity: 0,
+          y: "0.4em",
+        },
+        {
+          rotationX: 0,
+          opacity: 1,
+          y: "0em",
+          duration: 0.8,
+          ease: "back.out(1.4)",
+          stagger: {
+            each: 0.06,
+            from: "start",
+          },
+        }
+      )
+      // Hold
+      .to({}, { duration: 2 })
+      // Roll out upward
+      .to(chars, {
+        rotationX: direction * 90,
+        opacity: 0,
+        y: "-0.4em",
+        duration: 0.6,
+        ease: "back.in(1.4)",
+        stagger: {
+          each: 0.05,
+          from: "start",
+        },
+      })
+      // Pause before repeat
+      .to({}, { duration: 0.4 });
+
+      return tl;
+    }
+
+    playRoll();
+  </script>
+</body>
+</html>
